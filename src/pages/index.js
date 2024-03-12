@@ -3,41 +3,43 @@ import React, { useState, useContext, useEffect } from "react";
 import GlobalContext from "../utils/globalProcess";
 import { connectArweaveWallet, checkActiveAddress } from "../utils/arconnect";
 import { fetchProcessTransactionsQuery } from "../utils/graphqlQueries";
+import AoMessages from "../components/aoMessages";
+import loadLua from "../utils/loadLua";
+import luaArray from '../lua/exports';
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
-
 import ProcessComponent from "../components/ProcessComponent";
-import {
-  result,
-  results,
-  message,
-  spawn,
-  monitor,
-  unmonitor,
-  dryrun,
-} from "@permaweb/aoconnect";
-
+import {message, results} from "@permaweb/aoconnect"
 
 
 export default function Home() {
   const { globalState, setGlobalState } = useContext(GlobalContext);
   const [address, setAddress] = useState(null);
+  const [currentHash, setCurrentHash] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [cursor, setCursor] = useState(null);
+  const [canLoadMore, setCanLoadMore] = useState(true);
+  
 
-  async function connectArConnect() {
-    const arweaveAddress = await connectArweaveWallet();
-    setAddress(arweaveAddress);
-  }
+  // Process-related logic here, similar to what was in ProcessPage
 
   useEffect(() => {
-    async function init() {
+    async function checkAddress() {
       const activeAddress = await checkActiveAddress();
       if (activeAddress) {
         setAddress(activeAddress);
       }
     }
 
-    init();
+    checkAddress();
   }, []);
+
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash.startsWith('process/')) {
+      const processId = hash.split('/')[1];
+      fetchResults(processId, null);
+    }
+  }, [currentHash]);
 
   useEffect(() => {
     async function fetchData() {
@@ -62,7 +64,66 @@ export default function Home() {
     }
 
     fetchData().catch(console.error);
-  }, [address, setGlobalState]);
+  }, [address, setGlobalState])
+
+  useEffect(() => {
+    setCurrentHash(window.location.hash);
+    
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
+  // Rest of the useEffects and functions as in the previous index.js and [id].js
+
+  async function connectArConnect() {
+    const arweaveAddress = await connectArweaveWallet();
+    setAddress(arweaveAddress);
+  }
+
+  const loadMore = () => {
+    if (cursor && canLoadMore) {
+      fetchResults(id, cursor);
+    }
+  };
+
+  const fetchResults = async (processId, fromCursor) => {
+    const queryOptions = {
+      process: processId,
+      sort: "DESC",
+      limit: 25,
+    };
+
+    if (fromCursor) {
+      queryOptions.from = fromCursor;
+    }
+
+    const resultsOut = await results(queryOptions);
+    console.log(resultsOut);
+    const filteredMessages = resultsOut.edges
+      .map((edge) => edge.node)
+      .filter((node) => node.Messages && node.Messages.length > 0);
+
+    setMessages((prev) => [...prev, ...filteredMessages]);
+    const newCursor =
+      resultsOut.edges?.[resultsOut.edges.length - 1]?.cursor ?? null;
+    setCursor(newCursor);
+
+    setCanLoadMore(filteredMessages.length > 0 && messages.length < 100);
+  };
+
+  const handleLuaClick = async (luaScript) => {
+    const processId = currentHash.replace('#process/', '');
+    if (processId) {
+      await loadLua(processId, luaScript.lua);
+    }
+  };
 
   return (
     <>
@@ -72,12 +133,30 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main >
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {globalState.processes?.map((process) => (
-            <ProcessComponent key={process.id} process={process} />
-          ))}
-        </div>
+      <main>
+        {currentHash === "" && (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {globalState.processes?.map((process) => (
+              <ProcessComponent key={process.id} process={process} />
+            ))}
+          </div>
+        )}
+        {currentHash.startsWith('#process/') && (
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: 1 }}>
+              <AoMessages messages={messages} />
+              {canLoadMore && <button onClick={loadMore}>Load More</button>}
+            </div>
+            <div style={{ flex: 1, padding: '10px' }}>
+              {luaArray.map((script, index) => (
+                <div key={index} onClick={() => handleLuaClick(script)} style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ddd' }}>
+                  <strong>{script.name}</strong>
+                  <p>{script.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {!address && (
           <button onClick={connectArConnect}>Connect Arweave Wallet</button>
         )}

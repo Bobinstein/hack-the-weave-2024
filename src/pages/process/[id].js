@@ -1,11 +1,10 @@
 // src/pages/process/[id].js
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { results } from "@permaweb/aoconnect";
 import AoMessages from "../../components/aoMessages";
-import luaArray, { aliasLua, BlackJackLua, BlackJackReaderLua, bsTest, sendCREDToTest } from '../../lua/exports';
 import loadLua from "../../utils/loadLua";
-
+import luaArray from '../../lua/exports';
+import { results } from "@permaweb/aoconnect";
 
 const ProcessPage = () => {
   const router = useRouter();
@@ -13,12 +12,6 @@ const ProcessPage = () => {
   const [messages, setMessages] = useState([]);
   const [cursor, setCursor] = useState(null);
   const [canLoadMore, setCanLoadMore] = useState(true);
-
-  const luaScripts = luaArray;
-
-  const handleLuaClick = async (lua) => {
-    await loadLua(id, lua);
-  };
 
   const fetchResults = async (processId, fromCursor) => {
     const queryOptions = {
@@ -42,7 +35,6 @@ const ProcessPage = () => {
       resultsOut.edges?.[resultsOut.edges.length - 1]?.cursor ?? null;
     setCursor(newCursor);
 
-    // Update canLoadMore based on whether we have loaded 100 items and there is still data to load
     setCanLoadMore(filteredMessages.length > 0 && messages.length < 100);
   };
 
@@ -58,6 +50,10 @@ const ProcessPage = () => {
     }
   };
 
+  const handleLuaClick = async (luaScript) => {
+    await loadLua(id, luaScript.lua);
+  };
+
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ flex: 1 }}>
@@ -65,8 +61,8 @@ const ProcessPage = () => {
         {canLoadMore && <button onClick={loadMore}>Load More</button>}
       </div>
       <div style={{ flex: 1, padding: '10px' }}>
-        {Object.values(luaScripts).map((script, index) => (
-          <div key={index} onClick={() => handleLuaClick(script.lua)} style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ddd' }}>
+        {luaArray.map((script, index) => (
+          <div key={index} onClick={() => handleLuaClick(script)} style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ddd' }}>
             <strong>{script.name}</strong>
             <p>{script.description}</p>
           </div>
