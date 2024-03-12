@@ -15,6 +15,7 @@ const ProcessPage = () => {
   const lua = `BigTestValue = "doodoobop`;
 
   const sendMessage = async () => {
+    
     // The only 2 mandatory parameters here are process and signer
     await message({
       /*
