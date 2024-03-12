@@ -4,7 +4,11 @@
 import aliasLua from './aliasLua';
 import BlackJackLua from './BlackJackLua';
 import BlackJackReaderLua from './BlackJackReaderLua';
-import bsTest from './bs-test';
 
+
+
+const luaArray = [aliasLua, BlackJackLua, BlackJackReaderLua,]
 // Re-export them as named exports
-export { aliasLua, BlackJackLua, BlackJackReaderLua, bsTest };
+export default luaArray
+
+export { aliasLua, BlackJackLua, BlackJackReaderLua,  };

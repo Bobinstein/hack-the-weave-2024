@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { results } from "@permaweb/aoconnect";
 import AoMessages from "../../components/aoMessages";
-import { aliasLua, BlackJackLua, BlackJackReaderLua, bsTest } from '../../lua/exports';
+import luaArray, { aliasLua, BlackJackLua, BlackJackReaderLua, bsTest, sendCREDToTest } from '../../lua/exports';
 import loadLua from "../../utils/loadLua";
 
 
@@ -14,7 +14,7 @@ const ProcessPage = () => {
   const [cursor, setCursor] = useState(null);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
-  const luaScripts = [aliasLua, BlackJackLua, BlackJackReaderLua, bsTest];
+  const luaScripts = luaArray;
 
   const handleLuaClick = async (lua) => {
     await loadLua(id, lua);
