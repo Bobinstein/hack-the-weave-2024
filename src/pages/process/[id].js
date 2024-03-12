@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { results } from "@permaweb/aoconnect";
 import AoMessages from "../../components/aoMessages";
-import { message, createDataItemSigner } from "@permaweb/aoconnect";
+import { aliasLua, BlackJackLua, BlackJackReaderLua, bsTest } from '../../lua/exports';
+import loadLua from "../../utils/loadLua";
+
 
 const ProcessPage = () => {
   const router = useRouter();
@@ -12,35 +14,10 @@ const ProcessPage = () => {
   const [cursor, setCursor] = useState(null);
   const [canLoadMore, setCanLoadMore] = useState(true);
 
-  const lua = `BigTestValue = "doodoobop`;
+  const luaScripts = [aliasLua, BlackJackLua, BlackJackReaderLua, bsTest];
 
-  const sendMessage = async () => {
-    
-    // The only 2 mandatory parameters here are process and signer
-    await message({
-      /*
-      The arweave TXID of the process, this will become the "target".
-      This is the process the message is ultimately sent to.
-    */
-      process: "CwoiizB4SRis0EjptFwtiGVHdP6Qzry_6_08zFR4Rhs",
-
-      // anchor: "Dncf48f-E29LtcRlsgpxFaIyBzx86MQrsQfNEZMNkXw",
-
-      // Tags that the process will use as input.
-      tags: [
-        { name: "Action", value: "Eval" },
-        //   { name: "Another-Tag", value: "another-value" },
-      ],
-      // // A signer function used to build the message "signature"
-      signer: createDataItemSigner(window.arweaveWallet),
-      /*
-      The "data" portion of the message.
-      If not specified a random string will be generated
-    */
-      data: lua,
-    })
-      .then(console.log)
-      .catch(console.error);
+  const handleLuaClick = async (lua) => {
+    await loadLua(id, lua);
   };
 
   const fetchResults = async (processId, fromCursor) => {
@@ -82,10 +59,19 @@ const ProcessPage = () => {
   };
 
   return (
-    <div>
-      <AoMessages messages={messages} />
-      {canLoadMore && <button onClick={loadMore}>Load More</button>}
-      <button onClick={sendMessage}>Send Message</button>
+    <div style={{ display: 'flex' }}>
+      <div style={{ flex: 1 }}>
+        <AoMessages messages={messages} />
+        {canLoadMore && <button onClick={loadMore}>Load More</button>}
+      </div>
+      <div style={{ flex: 1, padding: '10px' }}>
+        {Object.values(luaScripts).map((script, index) => (
+          <div key={index} onClick={() => handleLuaClick(script.lua)} style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ddd' }}>
+            <strong>{script.name}</strong>
+            <p>{script.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
