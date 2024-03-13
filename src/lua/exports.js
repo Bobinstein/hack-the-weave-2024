@@ -4,11 +4,14 @@
 import aliasLua from './aliasLua';
 import BlackJackLua from './BlackJackLua';
 import BlackJackReaderLua from './BlackJackReaderLua';
+import cautiousArenaBot from './cautiousArenaBot';
+import aggressiveArenaBot from './aggressiveArenaBot';
+import adaptiveArenaBot from './adaptiveArenaBot';
+import guerillaArenaBot from './guerillaArenaBot';
 
 
-
-const luaArray = [aliasLua, BlackJackLua, BlackJackReaderLua,]
+const luaArray = [aliasLua, BlackJackLua, BlackJackReaderLua, cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot]
 // Re-export them as named exports
 export default luaArray
 
-export { aliasLua, BlackJackLua, BlackJackReaderLua,  };
+export { aliasLua, BlackJackLua, BlackJackReaderLua,cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot  };
