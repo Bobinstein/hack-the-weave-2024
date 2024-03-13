@@ -108,7 +108,7 @@ export default function Home() {
     console.log(resultsOut);
     const filteredMessages = resultsOut.edges
       .map((edge) => edge.node)
-      .filter((node) => node.Messages && node.Messages.length > 0);
+      .filter((node) => node.Messages && node.Messages.length > 0 && node.Messages[0].Data);
 
     setMessages((prev) => [...prev, ...filteredMessages]);
     const newCursor =
@@ -144,7 +144,7 @@ export default function Home() {
         {currentHash.startsWith('#process/') && (
           <div style={{ display: 'flex' }}>
             <div style={{ flex: 1 }}>
-              <AoMessages messages={messages} />
+              {messages.length > 0 ? <AoMessages messages={messages} /> : <p>You have no messages.</p>}
               {canLoadMore && <button onClick={loadMore}>Load More</button>}
             </div>
             <div style={{ flex: 1, padding: '10px' }}>
