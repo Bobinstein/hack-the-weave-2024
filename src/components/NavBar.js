@@ -12,6 +12,9 @@ const NavBar = () => {
             window.location.hash = ''; // Clear the hash
             window.location.reload(); // Force the page to reload
         }
+        if (!window.location.hash){
+            window.location.href = "./"
+        }
     };
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -24,7 +27,7 @@ const NavBar = () => {
                 <a onClick={handleHomeClick} style={{ cursor: 'pointer', color: '#fff', textDecoration: 'none' }}>
                     Home
                 </a>
-                {' '}
+                {'  |  '}
                 <Link href="/game" legacyBehavior>
                     <a style={{ color: '#fff', textDecoration: 'none' }}>Game</a>
                 </Link>

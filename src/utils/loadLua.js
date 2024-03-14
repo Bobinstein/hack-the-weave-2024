@@ -1,6 +1,6 @@
 import { message, createDataItemSigner } from "@permaweb/aoconnect";
 
-export default async function(process, lua){
+export default async function loadLua(process, lua){
   const messageID =  await message({
         /*
         The arweave TXID of the process, this will become the "target".

@@ -5,6 +5,7 @@ import { checkActiveAddress } from "../utils/arconnect";
 import { results, message, createDataItemSigner } from "@permaweb/aoconnect";
 import { fetchProcessTransactionsQuery } from "../utils/graphqlQueries";
 import NavBar from "@/components/NavBar";
+import triggerGameState from "@/utils/triggerGameState";
 
 const GamePage = () => {
   const { globalState, setGlobalState } = useContext(GlobalContext);
@@ -34,35 +35,39 @@ const GamePage = () => {
   };
 
   const fetchGameState = async () => {
+    await triggerGameState()
     const gameResults = await results({
       process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
       sort: "DESC",
-      limit: 5,
+      limit: 25,
     });
-
+  
     console.log("Game results fetched:", gameResults);
-    const gameStateMessage = gameResults.edges
-      .flatMap(edge => edge.node.Messages)
+    const gameStateMessages = gameResults.edges.flatMap(edge => edge.node.Messages);
+  
+    const gameStateMessage = gameStateMessages
       .find(message => message.Tags.some(tag => tag.name === "Action" && tag.value === "GameState"));
-
+  
     if (gameStateMessage) {
       const stateData = JSON.parse(gameStateMessage.Data);
       console.log("Game state fetched:", stateData);
       if (!gameState || stateData.TimeRemaining > gameState.TimeRemaining) {
         setGameState(stateData);
-        setTimeRemaining(stateData.TimeRemaining);
+        setTimeRemaining(stateData.TimeRemaining / 1000);
       }
     }
-
-    const newAnnouncements = gameResults.edges
-      .flatMap(edge => edge.node.Messages)
+  
+    const newAnnouncements = gameStateMessages
       .filter(message => message.Tags.some(tag => tag.name === "Action" && tag.value === "Announcement"))
-      .map(message => message.Data);
-
-      setAnnouncements(prevAnnouncements => [...newAnnouncements, ...prevAnnouncements].slice(0, 10));
-
-    console.log("Announcements updated:", newAnnouncements);
+      .map(message => message.Data)
+      .filter(announcement => !announcements.includes(announcement));
+  
+    const uniqueAnnouncements = Array.from(new Set([...newAnnouncements, ...announcements])).slice(0, 10);
+  
+    setAnnouncements(uniqueAnnouncements);
+    console.log("Announcements updated:", uniqueAnnouncements);
   };
+  
 
   useEffect(() => {
     fetchProcesses();
@@ -155,7 +160,7 @@ const GamePage = () => {
       {announcements.length > 0 ? (
         <ul>
           {announcements.map((announcement, index) => (
-            <li key={index} style={{ color: /hit/i.test(announcement) ? 'red' : /attack/i.test(announcement) ? 'green' : 'black' }}>
+            <li key={index} style={{ color: /hit/i.test(announcement) ? 'red' : /attack/i.test(announcement) ? 'green' : 'white' }}>
               {announcement}
             </li>
           ))}
