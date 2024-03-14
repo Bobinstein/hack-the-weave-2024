@@ -9,6 +9,7 @@ import luaArray from '../lua/exports';
 import Head from "next/head";
 import ProcessComponent from "../components/ProcessComponent";
 import {message, results} from "@permaweb/aoconnect"
+import NavBar from '../components/NavBar';
 
 
 export default function Home() {
@@ -21,6 +22,17 @@ export default function Home() {
   
 
   // Process-related logic here, similar to what was in ProcessPage
+
+
+  async function clickyClick(){
+
+    const gameResults = await results({
+      process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
+      sort: "DESC",
+      limit: 5
+    })
+    console.log(gameResults)
+  }
 
   useEffect(() => {
     async function checkAddress() {
@@ -134,6 +146,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <NavBar />
         {currentHash === "" && (
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             {globalState.processes?.map((process) => (
@@ -161,6 +174,7 @@ export default function Home() {
           <button onClick={connectArConnect}>Connect Arweave Wallet</button>
         )}
         {address && <p>Connected with: {address}</p>}
+        <button onClick={clickyClick}>CheckGame</button>
       </main>
     </>
   );
