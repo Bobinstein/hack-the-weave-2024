@@ -1,6 +1,8 @@
 import { message, createDataItemSigner } from "@permaweb/aoconnect";
 
 export default async function triggerGameState(){
+
+    console.log("triggering game state")
   const messageID =  await message({
 
         process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",

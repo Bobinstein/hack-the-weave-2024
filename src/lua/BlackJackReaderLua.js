@@ -1,6 +1,6 @@
 const BlackJackReaderLua = {
 name: "BlackJack Reader",
-description: "Prints out messages you recieve from the official Black Jack process.",
+description: "Prints out easy to read messages you receive from the official Black Jack process.",
 lua: `
 BlackJack = "Vo7O7WJ2OPlKBtudjfeOdzjcjpi_-V_RLE27VpZP8jA"
 Handlers.add(

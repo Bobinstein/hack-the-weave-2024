@@ -35,19 +35,26 @@ const GamePage = () => {
   };
 
   const fetchGameState = async () => {
-    await triggerGameState()
+    await triggerGameState();
     const gameResults = await results({
       process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
       sort: "DESC",
       limit: 25,
     });
-  
-    console.log("Game results fetched:", gameResults);
-    const gameStateMessages = gameResults.edges.flatMap(edge => edge.node.Messages);
-  
-    const gameStateMessage = gameStateMessages
-      .find(message => message.Tags.some(tag => tag.name === "Action" && tag.value === "GameState"));
-  
+
+    if (gameResults) {
+      console.log("Game results fetched:", gameResults);
+    }
+    const gameStateMessages = gameResults.edges.flatMap(
+      (edge) => edge.node.Messages
+    );
+
+    const gameStateMessage = gameStateMessages.find((message) =>
+      message.Tags.some(
+        (tag) => tag.name === "Action" && tag.value === "GameState"
+      )
+    );
+
     if (gameStateMessage) {
       const stateData = JSON.parse(gameStateMessage.Data);
       console.log("Game state fetched:", stateData);
@@ -56,18 +63,30 @@ const GamePage = () => {
         setTimeRemaining(stateData.TimeRemaining / 1000);
       }
     }
-  
+
     const newAnnouncements = gameStateMessages
-      .filter(message => message.Tags.some(tag => tag.name === "Action" && tag.value === "Announcement"))
-      .map(message => message.Data)
-      .filter(announcement => !announcements.includes(announcement));
-  
-    const uniqueAnnouncements = Array.from(new Set([...newAnnouncements, ...announcements])).slice(0, 10);
-  
+      .filter((message) =>
+        message.Tags.some(
+          (tag) => tag.name === "Action" && tag.value === "Announcement"
+        )
+      )
+      .map((message) => message.Data)
+      .filter(
+        (announcement) =>
+          !announcements.includes(announcement) &&
+          !announcement.includes("The game will end in") &&
+          !announcement.includes("The game will begin in")
+      );
+
+    // Combine and de-duplicate announcements, then reverse the order
+    const combinedAnnouncements = Array.from(
+      new Set([...announcements, ...newAnnouncements])
+    );
+    const uniqueAnnouncements = combinedAnnouncements.slice(-10).reverse();
+
     setAnnouncements(uniqueAnnouncements);
     console.log("Announcements updated:", uniqueAnnouncements);
   };
-  
 
   useEffect(() => {
     fetchProcesses();
@@ -79,16 +98,17 @@ const GamePage = () => {
   useEffect(() => {
     if (timeRemaining > 0) {
       const timer = setInterval(() => {
-        setTimeRemaining(prevTime => prevTime - 1);
+        setTimeRemaining((prevTime) => prevTime - 1);
       }, 1000);
       return () => clearInterval(timer);
     }
   }, [timeRemaining]);
 
-  const isPlayerOwned = (playerId) => globalState.processes?.some(process => process.id === playerId);
+  const isPlayerOwned = (playerId) =>
+    globalState.processes?.some((process) => process.id === playerId);
 
   const renderGameGrid = () => {
-    if (!gameState) return <p>Loading game state...</p>;
+    if (!gameState) return <><p>Loading game state...</p><p>If this is taking an unusually long amount of time, try refreshing the page.</p></>;
 
     switch (gameState.GameMode) {
       case "Playing":
@@ -105,8 +125,11 @@ const GamePage = () => {
             {Array.from({ length: 40 * 40 }).map((_, index) => {
               const x = (index % 40) + 1;
               const y = Math.floor(index / 40) + 1;
-              const playerEntry = gameState.Players &&
-                Object.entries(gameState.Players).find(([_, p]) => p.x === x && p.y === y);
+              const playerEntry =
+                gameState.Players &&
+                Object.entries(gameState.Players).find(
+                  ([_, p]) => p.x === x && p.y === y
+                );
               const playerId = playerEntry ? playerEntry[0] : null;
               const player = playerEntry ? playerEntry[1] : null;
 
@@ -118,7 +141,9 @@ const GamePage = () => {
                     paddingTop: "100%",
                     position: "relative",
                     border: "1px solid black",
-                    backgroundColor: isPlayerOwned(playerId) ? 'green' : 'transparent',
+                    backgroundColor: isPlayerOwned(playerId)
+                      ? "green"
+                      : "transparent",
                   }}
                 >
                   {player && (
@@ -147,7 +172,7 @@ const GamePage = () => {
         );
 
       case "Waiting":
-        return <p>Waiting for game to start. Time remaining: {timeRemaining} seconds</p>;
+        return <p>Waiting for game to start.</p>;
 
       default:
         return <p>Game mode is currently {gameState.GameMode}.</p>;
@@ -160,7 +185,16 @@ const GamePage = () => {
       {announcements.length > 0 ? (
         <ul>
           {announcements.map((announcement, index) => (
-            <li key={index} style={{ color: /hit/i.test(announcement) ? 'red' : /attack/i.test(announcement) ? 'green' : 'white' }}>
+            <li
+              key={index}
+              style={{
+                color: /hit/i.test(announcement)
+                  ? "red"
+                  : /attack/i.test(announcement)
+                  ? "green"
+                  : "white",
+              }}
+            >
               {announcement}
             </li>
           ))}
@@ -170,23 +204,20 @@ const GamePage = () => {
       )}
     </div>
   );
-  
 
   return (
     <div>
       <NavBar />
       <h1>Game State</h1>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'start' }}>
-        <div style={{ flex: 3, marginRight: '5%' }}>
-          {renderGameGrid()}
-        </div>
-        <div style={{ flex: 1 }}>
-          {renderAnnouncements()}
-        </div>
+      {timeRemaining && <p>Time Remaining: {timeRemaining}</p>}
+      <div
+        style={{ display: "flex", flexDirection: "row", alignItems: "start" }}
+      >
+        <div style={{ flex: 3, marginRight: "5%" }}>{renderGameGrid()}</div>
+        <div style={{ flex: 1 }}>{renderAnnouncements()}</div>
       </div>
     </div>
   );
-  
 };
 
 export default GamePage;
