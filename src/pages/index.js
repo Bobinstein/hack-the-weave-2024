@@ -155,6 +155,10 @@ export default function Home() {
     }
   }
 
+  const handleConnect = () => {
+    connectArConnect(address, setAddress, setGlobalState);
+  };
+
   async function refreshResults() {
     const hash = window.location.hash.replace("#", "");
     if (hash.startsWith("process/")) {
@@ -177,7 +181,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Bob's Hackathon Thingy</title>
+        <title>Bobs Hackathon Thingy</title>
         <meta
           name="description"
           content="A simple permaweb dApp for ao stuff"
@@ -221,7 +225,7 @@ export default function Home() {
                       <p>Loading processes...</p>
                     )}
                   {globalState.processes?.map((process) => (
-                    <ProcessComponent key={process.id} process={process} />
+                    <ProcessComponent key={process.id} process={process}/>
                   ))}
                 </div>
               </>
@@ -296,10 +300,27 @@ export default function Home() {
                 </div>
               </div>
             )}
-            {!address && (
-              <button onClick={connectArConnect}>Connect Arweave Wallet</button>
+            {!address ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100vh",
+                }}
+              >
+                <button
+                  onClick={handleConnect}
+                  style={{ padding: "10px 20px", fontSize: "1.5em" }}
+                >
+                  Connect Arweave Wallet
+                </button>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", marginTop: "50px" }}>
+                <p>Connected with: {address}</p>
+              </div>
             )}
-            {address && <p>Connected with: {address}</p>}
           </>
         )}
       </main>

@@ -8,10 +8,11 @@ import cautiousArenaBot from './cautiousArenaBot';
 import aggressiveArenaBot from './aggressiveArenaBot';
 import adaptiveArenaBot from './adaptiveArenaBot';
 import guerillaArenaBot from './guerillaArenaBot';
+import gameUtils from './gameUtils';
 
 
-const luaArray = [BlackJackLua, BlackJackReaderLua, cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot]
+const luaArray = [BlackJackLua, BlackJackReaderLua, cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot, gameUtils]
 // Re-export them as named exports
 export default luaArray
 
-export {BlackJackLua, BlackJackReaderLua,cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot  };
+export {BlackJackLua, BlackJackReaderLua,cautiousArenaBot, aggressiveArenaBot, adaptiveArenaBot, guerillaArenaBot, gameUtils  };

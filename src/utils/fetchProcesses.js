@@ -1,4 +1,5 @@
 import { fetchProcessTransactionsQuery } from "./graphqlQueries";
+import GlobalContext from "../utils/globalProcess";
 
 export const fetchProcesses = async (address, setGlobalState) => {
   const query = fetchProcessTransactionsQuery(address);
