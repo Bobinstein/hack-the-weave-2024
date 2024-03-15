@@ -4,11 +4,20 @@ const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [globalState, setGlobalState] = useState({
-    aoResults: []
+    aoResults: [],
+    isLoading: false,
   });
 
+  // Function to set loading state
+  const setLoading = (isLoading) => {
+    setGlobalState((prevState) => ({
+      ...prevState,
+      isLoading,
+    }));
+  };
+
   return (
-    <GlobalContext.Provider value={{ globalState, setGlobalState }}>
+    <GlobalContext.Provider value={{ globalState, setGlobalState, setLoading }}>
       {children}
     </GlobalContext.Provider>
   );

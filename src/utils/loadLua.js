@@ -1,28 +1,21 @@
 import { message, createDataItemSigner } from "@permaweb/aoconnect";
 
-export default async function loadLua(process, lua){
-  const messageID =  await message({
-        /*
-        The arweave TXID of the process, this will become the "target".
-        This is the process the message is ultimately sent to.
-      */
-        process: process,
-  
-        // Tags that the process will use as input.
-        tags: [
-          { name: "Action", value: "Eval" },
-          //   { name: "Another-Tag", value: "another-value" },
-        ],
-        // // A signer function used to build the message "signature"
-        signer: createDataItemSigner(window.arweaveWallet),
-        /*
-        The "data" portion of the message.
-        If not specified a random string will be generated
-      */
-        data: lua,
-      })
-        .then(console.log)
-        .catch(console.error);
+// Pass setLoading as a parameter
+export default async function loadLua(process, lua, setIsLoading) {
+  setIsLoading(true);
+  try {
+    const messageID = await message({
+      process: process,
+      tags: [{ name: "Action", value: "Eval" }],
+      signer: createDataItemSigner(window.arweaveWallet),
+      data: lua,
+    });
 
-        return messageID
-    };
+    console.log(messageID);
+    return messageID;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoading(false); // Ensure setLoading is called even if there's an error
+  }
+}

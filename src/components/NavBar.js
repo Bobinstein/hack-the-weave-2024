@@ -1,6 +1,5 @@
 // src/components/NavBar.js
 import React, { useContext, useState } from 'react';
-import Link from 'next/link';
 import GlobalContext from '../utils/globalProcess';
 
 const NavBar = () => {
@@ -8,13 +7,12 @@ const NavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleHomeClick = () => {
-        if (window.location.hash) {
-            window.location.hash = ''; // Clear the hash
-            window.location.reload(); // Force the page to reload
-        }
-        if (!window.location.hash){
-            window.location.href = "./"
-        }
+        window.location.hash = ''; // Clear the hash
+        window.location.reload(); // Force the page to reload
+    };
+
+    const handleGameClick = () => {
+        window.location.hash = 'game';
     };
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -28,9 +26,9 @@ const NavBar = () => {
                     Home
                 </a>
                 {'  |  '}
-                <Link href="/game" legacyBehavior>
-                    <a style={{ color: '#fff', textDecoration: 'none' }}>Game</a>
-                </Link>
+                <a onClick={handleGameClick} style={{ cursor: 'pointer', color: '#fff', textDecoration: 'none' }}>
+                    Game
+                </a>
             </div>
             <div>
                 {processes.length > 5 ? (
@@ -39,22 +37,18 @@ const NavBar = () => {
                     </button>
                 ) : (
                     processes.map(process => (
-                        <Link key={process.id} href={`/#process/${process.id}`} legacyBehavior>
-                            <a style={{ color: '#fff', textDecoration: 'none', marginLeft: '10px' }}>
-                                {process.tags.find(tag => tag.name === "Name")?.value || process.id}
-                            </a>
-                        </Link>
+                        <a key={process.id} href={`/#process/${process.id}`} style={{ color: '#fff', textDecoration: 'none', marginLeft: '10px' }}>
+                            {process.tags.find(tag => tag.name === "Name")?.value || process.id}
+                        </a>
                     ))
                 )}
                 {isMenuOpen && (
                     <div style={{ position: 'absolute', right: '10px', backgroundColor: '#555', padding: '10px', marginTop: '10px' }}>
                         {processes.map(process => (
                             <div key={process.id}>
-                                <Link href={`/#process/${process.id}`} legacyBehavior>
-                                    <a style={{ color: '#fff', textDecoration: 'none' }}>
-                                        {process.tags.find(tag => tag.name === "Name")?.value || process.id}
-                                    </a>
-                                </Link>
+                                <a href={`/#process/${process.id}`} style={{ color: '#fff', textDecoration: 'none' }}>
+                                    {process.tags.find(tag => tag.name === "Name")?.value || process.id}
+                                </a>
                             </div>
                         ))}
                     </div>
