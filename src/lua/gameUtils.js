@@ -26,7 +26,7 @@ const gameUtils = {
                 return "Payment of 1000 to Game requested."
             elseif key == "fund" then
                 print("Requesting game tokens.")
-                Send({ Target = Game, Action = "RequestTokens"})
+                Send({ Target = Game_PROCESS, Action = "RequestTokens"})
                 return "Tokens have been requested"
             else
                 return nil

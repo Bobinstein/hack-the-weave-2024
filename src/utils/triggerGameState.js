@@ -14,14 +14,14 @@ export default async function triggerGameState(){
       })
         .catch(console.error);
 
-const tickID = await message({
+// const tickID = await message({
 
-    process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
-    tags: [
-      { name: "Action", value: "Tick" },
-    ],
+//     process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
+//     tags: [
+//       { name: "Action", value: "Tick" },
+//     ],
 
-    signer: createDataItemSigner(window.arweaveWallet),
-  })
-    .catch(console.error);
+//     signer: createDataItemSigner(window.arweaveWallet),
+//   })
+//     .catch(console.error);
     };

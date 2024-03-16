@@ -91,7 +91,7 @@ const GamePage = () => {
   useEffect(() => {
     fetchProcesses();
     fetchGameState();
-    const interval = setInterval(fetchGameState, 5000);
+    const interval = setInterval(fetchGameState, 30000);
     return () => clearInterval(interval);
   }, []);
 
