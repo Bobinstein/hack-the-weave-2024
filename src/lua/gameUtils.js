@@ -23,11 +23,13 @@ const gameUtils = {
             elseif key == "pay" then
                 print("Paying 1000 to Game")
                 Send({ Target = GAME_PROCESS, Action = "Transfer", Recipient = GAME_PROCESS, Quantity = "1000" })
-                return "Payment of 1000 to Game requested."
+                return "Sending 1000 tokens to the game."
             elseif key == "fund" then
                 print("Requesting game tokens.")
-                Send({ Target = Game_PROCESS, Action = "RequestTokens"})
+                Send({ Target = GAME_PROCESS, Action = "RequestTokens"})
                 return "Tokens have been requested"
+            elseif key == "process" then
+                return GAME_PROCESS
             else
                 return nil
             end
