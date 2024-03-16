@@ -115,7 +115,7 @@ const aggressiveArenaBot = {
       Handlers.utils.hasMatchingTag("Action", "AutoPay"),
       function ()
         print(colors.yellow .. "Auto-paying confirmation fees." .. colors.reset)  -- Changed to yellow
-        ao.send({ Target = Game, Action = "Transfer", Recipient = Game, Quantity = "1000"})
+        ao.send({ Target = AggressiveGameProcess, Action = "Transfer", Recipient = AggressiveGameProcess, Quantity = "1000"})
       end
     )
     
@@ -147,7 +147,6 @@ const aggressiveArenaBot = {
       end
     )
     
-
     `
 }
 

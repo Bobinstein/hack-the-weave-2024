@@ -28,7 +28,7 @@ export const fetchGameState = async (setGameState, setAnnouncements, setTimeRema
             setTimeRemaining(stateData.TimeRemaining / 1000);
         }
     }
-console.log("gameResults: ", gameResults)
+// console.log("gameResults: ", gameResults)
     const newAnnouncements = gameStateMessages
         .filter((message) =>
             message.Tags.some(
@@ -42,7 +42,7 @@ console.log("gameResults: ", gameResults)
                 !announcement.includes("The game will end in") &&
                 !announcement.includes("The game will begin in")
         );
-console.log("announcements: ", gameStateMessage)
+// console.log("announcements: ", gameStateMessage)
     // Ensure announcements is always an array to prevent undefined error
     const combinedAnnouncements = Array.from(
         new Set([...(announcements || []), ...newAnnouncements])
