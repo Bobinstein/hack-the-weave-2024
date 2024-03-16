@@ -15,6 +15,7 @@ import ProcessComponent from "../components/ProcessComponent";
 import NavBar from "../components/NavBar";
 import { checkActiveAddress } from "@/utils/arconnect";
 import { fetchProcessTransactionsQuery } from "@/utils/graphqlQueries";
+import triggerGameState from "@/utils/triggerGameState";
 
 export default function Home() {
   const { globalState, setGlobalState } = useContext(GlobalContext);
@@ -46,6 +47,14 @@ export default function Home() {
 
     return () => clearInterval(interval); // This will clear the interval when the component unmounts or the useEffect is re-run
   }, [currentHash]); // Include currentHash if it's important to restart the interval when it changes
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+        triggerGameState();
+    }, 30000); // 30000 milliseconds = 30 seconds
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+}, []); 
 
   useEffect(() => {
     async function checkAddress() {

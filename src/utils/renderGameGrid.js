@@ -24,6 +24,7 @@ const renderGameGrid = ({ gameState, isPlayerOwned }) => {
         <>
             <div style={{ textAlign: 'center', margin: '20px 0' }}>
                 {/* Please excuse the buggy ticks, ao is still early beta and game processes do not always behave the way they are supposed to. (it's not all my fault) */}
+                Game state is queried and updated every 5 seconds. A prompt to update game state is sent to the game process every 30 seconds to mitigate freezing.
             </div>
             {gameState.GameMode === "Playing" ? (
                 <div
