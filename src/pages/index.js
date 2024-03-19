@@ -16,6 +16,7 @@ import NavBar from "../components/NavBar";
 import { checkActiveAddress } from "@/utils/arconnect";
 import { fetchProcessTransactionsQuery } from "@/utils/graphqlQueries";
 import triggerGameState from "@/utils/triggerGameState";
+import ticklePlayers from "@/utils/ticklePlayers";
 
 export default function Home() {
   const { globalState, setGlobalState } = useContext(GlobalContext);
@@ -307,6 +308,7 @@ export default function Home() {
                     <RenderAnnouncements announcements={announcements} />
                   </div>
                 </div>
+                { gameState?.GameMode == "Playing" && <center><button onClick={() => ticklePlayers(gameState)}>Tickle Players</button></center>}
               </div>
             )}
             {!address ? (
