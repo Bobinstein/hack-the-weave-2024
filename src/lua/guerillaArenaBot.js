@@ -2,7 +2,7 @@ const guerillaArenaBot = {
     name: "Guerilla Arena Bot",
     description: "An Arena bot that specializes in guerilla warfare",
     lua: `
-    GuerillaGameProcess = "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk"
+    GuerillaGameProcess = "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE"
 
 -- Initializing global variables to store the latest game state and game host process.
 LatestGameState = LatestGameState or nil

@@ -5,7 +5,7 @@ export default async function triggerGameState(){
     console.log("triggering game state")
   const messageID =  await message({
 
-        process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
+        process: "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE",
         tags: [
           { name: "Action", value: "GetGameState" },
         ],
@@ -16,7 +16,7 @@ export default async function triggerGameState(){
 
 // const tickID = await message({
 
-//     process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
+//     process: "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE",
 //     tags: [
 //       { name: "Action", value: "Tick" },
 //     ],

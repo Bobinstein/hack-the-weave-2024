@@ -1,7 +1,7 @@
 const gameUtils = {
     name: "Game Utilities",
     description: "Simplifies Game commands like register, pay, and get game state.",
-    lua: `GAME_PROCESS = "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk"
+    lua: `GAME_PROCESS = "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE"
 
     _GAME = { state = "Game state has not been checked yet. Updating now." }
     

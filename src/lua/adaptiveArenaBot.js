@@ -2,7 +2,7 @@ const adaptiveArenaBot = {
     name: "Adaptive Arena Bot",
     description: "An Arena bot that changes its behavior based on the actions of other players",
     lua: `
-    AdaptiveGameProcess = "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk"
+    AdaptiveGameProcess = "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE"
 
 -- Initializing global variables to store the latest game state and game host process.
 LatestGameState = LatestGameState or nil

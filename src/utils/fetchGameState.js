@@ -4,7 +4,7 @@ import triggerGameState from "./triggerGameState";
 export const fetchGameState = async (setGameState, setAnnouncements, setTimeRemaining, gameState, announcements = []) => {
     // await triggerGameState();
     const gameResults = await results({
-        process: "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk",
+        process: "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE",
         sort: "DESC",
         limit: 25,
     });

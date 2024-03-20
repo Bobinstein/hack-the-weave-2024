@@ -1,7 +1,7 @@
 const aggressiveArenaBot = {
     name: "Agressive Arena Bot",
     description: "An Arena Bot that will aggressively attack other players",
-    lua: `AggressiveGameProcess = "gG-uz2w6qCNYWQGwocOh225ccJMj6fkyGDSKDS2K_nk"
+    lua: `AggressiveGameProcess = "0rVZYFxvfJpO__EfOz0_PUQ3GFE9kEaES0GkUDNXjvE"
 
     -- Initializing global variables to store the latest game state and game host process.
     LatestGameState = LatestGameState or nil
